@@ -1,55 +1,62 @@
+# php is a scripting language
+## what is scripting language
+- it is a programming language which run at runtime
+- it doesn't need compiler, it uses interpreter
+- it run line by line
+
 # what is vendor?
-When you're working on a PHP project, especially in the context of modern PHP development using tools like Composer, a "vendor" typically refers to the `directory` where `Composer installs dependencies for your project`. Composer is a dependency manager for PHP that allows you to declare the libraries your project depends on and manages them for you.
-
-Here's a basic overview:
-
-1. **Composer**: Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and installs them for you.
-
-2. **Vendor Directory**: When you run `composer install` or `composer update`, Composer creates a "vendor" directory in your project. This directory contains the dependencies (third-party libraries) that your project relies on.
-
-3. **Autoloading**: Composer generates an autoloader in the vendor directory, which makes it easy for your PHP code to use classes and functions from the installed dependencies.
-
-For example, in a typical PHP project, you might see a `vendor` directory that contains subdirectories for various libraries your project depends on. This directory is often added to the `.gitignore` file since it's generally not necessary to version control the actual library code.
-
-Here's a simplified directory structure:
-
-```
-/your_project
-    /vendor
-        /vendor_name
-            /library1
-            /library2
-        /another_vendor
-            /library3
-    /src
-        Your PHP source code files
-    composer.json
-    composer.lock
-```
-
-In the above structure, the `/vendor` directory contains the third-party libraries (vendors) installed by Composer.
-
-The `composer.json` file in the root of your project specifies the dependencies and configuration for Composer, and `composer.lock` keeps track of the exact versions of dependencies installed in your project.
+direcroty contain all packages i have installed to use in my project
 
 # php artisan
-- when i am inside project i call it
-- it will call artisan file inside laravel project i am in 
+- it will call artisan file inside laravel project i am in and excute commands in it
+- artisan file is designed to excute specific lines when i run php artisan serve for exmaple
+
+# auto-load & psr-4
+- psr-4 it is standard used for autoloading, in it we name classes with the same name as files
 
 # request life cycle in php
 - *that life cycle is very important because i will know every part of code work in any place and then can put code work right*
-- ex: session start in middle ware so in any file before it i can't write code to know how is the user login for example
+- ex: session start in middleware so in any file before it i can't write code to know how the user login for example
 ![](./images/lifecycle.jpg)
-- any requests are directed to index file 
+
+- any requests are directed to puplic/index.php هو دا المدخل الوحيد لل application بتاعي
+- puplic/index.php is the only entry to all files in my laravel project, no one can access any file without passing by that file
 - images, front end folders and any thing that will appear to the user must be in public folder
 
 - app service provider
+  - used for setup of my application 
   - contain all that i will include in every request like database, language
-  - app/http/kernal: load service providers 
-  - service provider: do register for service provider then boot it
+  - config/app.php: load service providers 
+  - all registers methods for all service providers are excuted first then boot methods are excuted
 
-- dispatch request & router
-  - what is the controller that will excute that request
-  - in that controller will not excute, we only know what is it 
+```php
+namespace App\Providers;
+
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    public function register(): void  // that register function for all service providers like AppServiceProvider, AuthServiceProvicer, BroadCastServiceProvicer, .... are excuted first
+    
+    // second after all thoser registers excuted boot start to be excuted
+    {
+        //
+    }
+
+    public function boot(): void
+    {
+        Validator::extend('filter', function ($attribute, $value,$params) {
+            return !(in_array(strtolower($value),$params));
+        }, "That value is prohibited!");
+        Paginator::useBootstrap();
+        // Paginator::defaultView('pagination.custom');
+    }
+}
+```
+- dispatch request
+  - define what is the controller that will excute that request
 - middleware
   - for check complete or not
   - authentication or prvillages
@@ -59,7 +66,29 @@ The `composer.json` file in the root of your project specifies the dependencies 
 - view: return page to user
 
 # service container
-- container i store vaibles in 
+- container i store vaibles and objects 
+- i use it to store object on it to use it over all my project, sometimes i should use same object over all project like when using obejct of connnection with database
+- باختصار هو مخزن بخزن فيه شوية متغيرات هحتجها لاحقا
+- to access object form service container
+```php
+$a = app('a');
+$a->sum(2,2);
+```
+
+# static method 
+- it is called for the class not object
+
+```php
+// if sum is a static method
+
+// i call it like that
+A::sum();
+
+// can't say 
+$a = new A();
+$a->sum(); // xxxxxx
+```
+
 ## facade class
 - class gives me access to object with static method
 - i must declare it in service container
@@ -69,10 +98,32 @@ The `composer.json` file in the root of your project specifies the dependencies 
 Route::get('/', function(){
     return view('welcome');
 });
-// that Route class is a facade class refere to router object
+// that Route class is a facade class refere to router object in service container
+
 // that is equal to 
-$router = app()->make('router'); // that name of the object is declared in service container
+// =============
+
+$router = app('route');// that name of the object is declared in service container
 $router->get('/', function(){
     return view('welcome');
 });
+```
+- to know facade class refere to which object in service container
+```php
+// in vendor/laravel/src/framework/Illuminate/Support/Facades
+
+namespace Illuminate\Support\Facades;
+class Route extends Facade
+{
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'router'; // mean Facade class refere to router object in service container
+    }
+}
+
 ```
