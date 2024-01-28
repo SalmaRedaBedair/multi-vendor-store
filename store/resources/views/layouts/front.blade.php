@@ -151,7 +151,15 @@
                                     <span>(+100) 123 456 7890</span>
                                 </h3>
                             </div>
-                            <x-cart-menu />
+                            <div class="navbar-cart">
+                                <div class="wishlist">
+                                    <a href="javascript:void(0)">
+                                        <i class="lni lni-heart"></i>
+                                        <span class="total-items">0</span>
+                                    </a>
+                                </div>
+                                <x-cart-menu />
+                            </div>
                         </div>
                     </div>
                 </div>

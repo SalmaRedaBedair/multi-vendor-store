@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Facade;
+namespace App\Facades;
 
 use App\Repositories\Cart\CartRepository;
-use Facade;
+use Illuminate\Support\Facades\Facade;
 
 class Cart extends Facade
 {
