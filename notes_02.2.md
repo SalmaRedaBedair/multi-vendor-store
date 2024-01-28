@@ -1,6 +1,13 @@
+# app
+- it will contain all source code
+- controllers, models, facades, requests, ...
+
+# App/Http/Controller/Controller.php
+- i can add in it any thing which is common in all controllers because all controllers extends it 
+
 # routes
 ## any
-- route will be requested with any method
+- route will be requested with any method (post, get, delete, ...)
 
 ```php
 Route::any('/dashboard',[DashboardController::class,'index']);
@@ -24,7 +31,7 @@ return view('dashboard')->with(['name'=>'salma reda'])
 // is equal to 
 return View::make('dashboard',['name'=>'salma'])
 // is equal to 
-return response()->view('dashboard',['name'=>'salma'])
+return response()->view('dashboard',['name'=>'salma']) // response function return object response
 // is equal to 
-return Response::view('dashboard',['name'=>'salma'])
+return Response::view('dashboard',['name'=>'salma']) // facade response
 ```
