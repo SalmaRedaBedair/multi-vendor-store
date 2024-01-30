@@ -1,3 +1,5 @@
+# Read the book 'Using components, read after video 6.4'
+
 # components in laravel
 - it is used to seperate parts of code in view i will use frequently
 - to create it 
