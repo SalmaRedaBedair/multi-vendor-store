@@ -41,27 +41,3 @@ $parents=Category::where('id','<>',$id)
 })
 ->get();
 ```
-
-# php artisan storage:link
-- that will go and execute array links in config/filesystems.php
-
-```php
-'links' => [
-        public_path('storage') => storage_path('app/public'),
-    ],
-```
-
-# advices for clean code
-- code in if must be smaller, like that 
-
-```php
-public function uploadImage(Request $request)
-{
-    if (!$request->hasFile('image')) {
-        return;
-    }
-    $file = $request->file('image');
-    $path = $file->store('uploads', 'public');
-    $data['image'] = $path;
-}
-```
