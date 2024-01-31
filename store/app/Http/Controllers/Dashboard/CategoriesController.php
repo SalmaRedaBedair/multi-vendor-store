@@ -47,7 +47,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        $parents = Category::all();
+        $parents = Category::all(['id','name']);
         $category = new Category();
         return view('dashboard.categories.create', compact(['parents', 'category']));
     }
@@ -69,7 +69,7 @@ class CategoriesController extends Controller
 
         $category = Category::create($data);
 
-        return Redirect::route('categories.index')
+        return Redirect::route('dashboard.categories.index')
             ->with('success', 'Category created!');
     }
 
@@ -88,11 +88,6 @@ class CategoriesController extends Controller
     {
         try {
             $category = Category::findorfail($id);
-        } catch (Exception $e) {
-            return redirect()->route('categories.index')
-                ->with('info', 'Record not found!');
-        }
-
         // SELECT * from categories whrere `id` <> $id and (parent_id is null or parent_id <> $parent_id)
         // to write that () i must use grouping over where
         $parents = Category::where('id', '<>', $id)
@@ -102,6 +97,10 @@ class CategoriesController extends Controller
             })
             ->get();
         return view('dashboard.categories.edit', compact(['category', 'parents']));
+        } catch (Exception $e) {
+            return redirect()->route('dashboard.categories.index')
+                ->with('info', 'Record not found!');
+        }
     }
 
     /**
@@ -115,7 +114,7 @@ class CategoriesController extends Controller
         try {
             $category = Category::findorfail($id);
         } catch (Exception $e) {
-            return redirect()->route('categories.index')->with('info', 'Category not found!');
+            return redirect()->route('dashboard.categories.index')->with('info', 'Category not found!');
         }
 
 
@@ -136,7 +135,7 @@ class CategoriesController extends Controller
 
         $category->update($data);
 
-        return Redirect::route('categories.index')->with('success', 'Category updated!');
+        return Redirect::route('dashboard.categories.index')->with('success', 'Category updated!');
     }
 
 
@@ -148,7 +147,7 @@ class CategoriesController extends Controller
         $Category = Category::findorfail($id);
         $Category->delete();
 
-        return Redirect::route('categories.index')
+        return Redirect::route('dashboard.categories.index')
             ->with('success', 'Category deleted!');
     }
 
@@ -172,7 +171,7 @@ class CategoriesController extends Controller
     { // here i can't use route model bindig (Category $category) because it is deleted
         $category = Category::onlyTrashed()->findorfail($id);
         $category->restore();
-        return redirect()->route('categories.trash')->with('success', 'category restored successfully.');
+        return redirect()->route('dashboard.categories.trash')->with('success', 'category restored successfully.');
     }
     public function forceDelete($id)
     {
@@ -183,7 +182,7 @@ class CategoriesController extends Controller
             Storage::disk('public')->delete($category->image);
         }
 
-        return redirect()->route('categories.trash')->with('success', 'category deleted forever.');
+        return redirect()->route('dashboard.categories.trash')->with('success', 'category deleted forever.');
     }
 }
 

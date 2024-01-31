@@ -1,24 +1,26 @@
-# find
-```php
-$category=Category::find($id);
-dd($category);
-```
+# update and create using save in laravel
 ![](./images/find.jpg)
-- if exsists true, find will return true, vice versa
 
-# findorfail
-- i tell him if you can't find object give me error 404 page
+if i call dd($contact)
+that will print a lot of attributes for me one of them is exists, as shown in the above image
+- if the value of that exist = true -> save() will update
+- if the value of that exist = false -> save will create
+
+save in laravel is designed to check exists, if it is true then update else create
 
 ```php
-$category=Category::find($id);
-if(!$category)
-{
-    abort(404);
-}
+// create
+$contact = new Contact;
+$contact->name = 'Ken Hirata';
+$contact->email = 'ken@hirata.com';
+$contact->save();
 
-// is equal to 
-$category=Category::findorfail($id);
+// update
+$contact = Contact::find(1);
+$contact->email = 'natalie@parkfamily.com';
+$contact->save();
 ```
+
 # destroy
 ```php
 Category::destroy($id);
@@ -27,12 +29,13 @@ $category=Category::findorfail($id);
 $category->delete();
 ```
 
-# group where using query bulider
+# write complex quires using query builder in laravel 
 ```php
-// SELECT * from categories whrere `id` <> $id and (parent_id is null or parent_id <> $parent_id)
-// to write that () i must use grouping over where
+// SELECT * from categories where `id` <> $id and (parent_id is null or parent_id <> $parent_id)
+
+// to write that (...) i must use grouping (closure function) over where
 $parents=Category::where('id','<>',$id)
-->where(function($query) use($id){ // we use that use to can use $id over closure function, i can't write that function($query,$id)
+->where(function($query) use($id){ // we use that use to can use $id over closure function, i can't write that function($query,$id), because that is callback function, will be called with other function
     $query->wherenull('parent_id')
     ->orWhere('parent_id','<>',$id);
 })
@@ -40,7 +43,7 @@ $parents=Category::where('id','<>',$id)
 ```
 
 # php artisan storage:link
-- that will go and excute array links in config/filesystems.php
+- that will go and execute array links in config/filesystems.php
 
 ```php
 'links' => [

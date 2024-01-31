@@ -42,7 +42,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @forelse ($categories as $category)
                 <tr>
                     <td>
                         <img src="{{ asset('storage/' . $category->image) }}" alt="" height="60">
@@ -64,12 +64,11 @@
                         </form>
                     </td>
                 </tr>
-            @endforeach
-            @empty($categories)
+            @empty
             <tr>
                 <td colspan="8">No categories defined.</td>
             </tr>
-            @endempty
+            @endforelse
         </tbody>
     </table>
 

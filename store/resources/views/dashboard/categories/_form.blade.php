@@ -15,9 +15,7 @@
 </div>
 <div class="form-group">
     <label for="">Category Parent</label>
-    <select name="parent_id" class="form-control form-select">
-        <x-form.select :options="$parents"  :checked="$category->parent" name="parent_id" />
-    </select>
+        <x-form.select :options="$parents"  :selected="$category->parent_id" name="parent_id" />
 </div>
 <div class="form-group">
     <x-form.textarea name="description" :value="$category->description" label="Description" />
