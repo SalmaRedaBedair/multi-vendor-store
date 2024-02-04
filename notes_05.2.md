@@ -1,7 +1,17 @@
 # local disk & public disk
 - local disk => storage/app 
 - public disk => storage/app/public
-## define file system disk
+
+# using storage facade
+```php
+Storage::get('file.jpg');
+```
+- that will access default disk whch is configured in config/filesystems.php
+```php
+ 'default' => env('FILESYSTEM_DISK', 'local'),
+// here default is local if i call Storage facade it will call local disk
+```
+## define file system disk `FILESYSTEM_DISK`
 - in .env
 
 # upload image
@@ -41,7 +51,7 @@ Storage::delete($old_image);
 
 # upload files into public directly 
 - sometimes i have no access to write commands on server
- - so i can't write that `php artisan storage:link`
+ - so i won't write that `php artisan storage:link`
  - so here it is recommended to make your own disk as shown down
 - 
 - here it is recommended to create your own disk
@@ -55,6 +65,14 @@ Storage::delete($old_image);
     'visibility' => 'public',
     'throw' => false,
 ],
+```
+
+# retrieving uploaded file
+- Illuminate\Http\Request instance using the file method or using dynamic properties.
+```php
+$file = $request->file('photo'); // file method
+ 
+$file = $request->photo; // dynamic property
 ```
 
 # advices for clean code
