@@ -1,6 +1,6 @@
-# custom validation rule
-- we use it to make our own rule for valiation like forbidden some keywords
-- run command
+# custom validation rule (there is three methods to make it)
+- we use it to make our own rule for validation like forbidden some keywords
+## run command
 
 ```
 php artisan make:Rule Filter
@@ -18,8 +18,10 @@ public function validate(string $attribute, mixed $value, Closure $fail): void
 new Filter($forbidden)
 ```
 ## make rule like that `filter:php,laravel,html,css`
+- make it in the boot of app/providers/appServiceProvider.php
 ```php
 Validator::extend('filter', function ($attribute, $value,$params) {
+    // the value in that $params in that example = [php,laravel,html,css]
     return !(in_array(strtolower($value),$params));
 }, "That value is prohibited!");
 ```
