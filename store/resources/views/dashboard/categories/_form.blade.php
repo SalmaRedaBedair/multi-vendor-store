@@ -3,33 +3,33 @@
         <b>Errors Ocurred!</b>
         <ul>
             @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+                <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
 
-    @endif
+@endif
 
 <div class="form-group"></div>
-    <x-form.input name='name' :value="$category->name" label="Category Name"/>
+<x-form.input name='name' :value="$category->name" label="Category Name"/>
 </div>
 <div class="form-group">
     <label for="">Category Parent</label>
-        <x-form.select :options="$parents"  :selected="$category->parent_id" name="parent_id" />
+    <x-form.select :options="$parents" :selected="$category->parent_id" name="parent_id"/>
 </div>
 <div class="form-group">
-    <x-form.textarea name="description" :value="$category->description" label="Description" />
+    <x-form.textarea name="description" :value="$category->description" label="Description"/>
 </div>
 <div class="form-group">
-    <x-form.label for="image" >Image</x-form.label>
-    <x-form.input name="image" type="file" accept="image/*" />
+    <x-form.label for="image">Image</x-form.label>
+    <x-form.input name="image" type="file" accept="image/*"/>
     @if (old('image',$category->image))
-    <img src="{{ asset('storage/' . old('image',$category->image)) }}" alt="" height="60" >
+        <img src="{{ asset('storage/' . old('image',$category->image)) }}" alt="" height="60">
     @endif
 </div>
 <div class="form-group">
     <label for="">Status</label>
-    <x-form.radio name="status" :options="['Active'=>'active', 'Archived'=>'archived']" :checked="$category->status" />
+    <x-form.radio name="status" :options="['Active'=>'active', 'Archived'=>'archived']" :checked="$category->status"/>
 </div>
 <div class="form-group">
     <button type="submit" class="btn btn-primary">{{ $button_label ?? 'Save' }}</button>
