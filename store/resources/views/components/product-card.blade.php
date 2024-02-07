@@ -1,6 +1,8 @@
 <div class="col-lg-3 col-md-6 col-12">
     <!-- Start Single Product -->
+    @if($product)
     <div class="single-product">
+
         <div class="product-image">
             <img src="{{ $product->image_url }}" alt="#">
             @if ($product->sale_percent)
@@ -14,7 +16,7 @@
             </div>
         </div>
         <div class="product-info">
-            <span class="category">{{ $product->category->name }}</span>
+            <span class="category">{{ $product->category->name ?? '' }}</span>
             <h4 class="title">
                 <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
             </h4>
@@ -32,5 +34,7 @@
             </div>
         </div>
     </div>
+    @endif
     <!-- End Single Product -->
+
 </div>

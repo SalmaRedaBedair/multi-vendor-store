@@ -5,25 +5,25 @@ return [
         'icon' => 'nav-icon fas fa-tachometer-alt',
         'route' => 'dashboard.dashboard',
         'title' => 'Dashboard',
-        'active'=>'dashboard'
+        'active'=>'dashboard.dashboard'
     ],
     [
         'icon' => 'nav-icon fas fa-tachometer-alt',
         'route' => 'dashboard.categories.index',
         'title' => 'Categories',
         'badge' => 'new',
-        'active'=>'categories.*'
+        'active'=>'dashboard.categories.*'
     ],
     [
         'icon' => 'nav-icon fas fa-tachometer-alt',
-        'route' => 'dashboard.categories.index',
+        'route' => 'dashboard.products.index',
         'title' => 'Products',
-        'active'=>'products.*'
+        'active'=>'dashboard.products.*'
     ],
     [
         'icon' => 'nav-icon fas fa-tachometer-alt',
-        'route' => 'dashboard.categories.index',
+        'route' => 'dashboard.products.index',
         'title' => 'Orders',
-        'active'=>'orders.*'
+        'active'=>'dashboard.orders.*'
     ]
 ];

@@ -9,7 +9,7 @@ use Illuminate\View\Component;
 
 class Nav extends Component
 {
-    public $items;
+    public $items; // i define that item public so i haven't to pass it to view file, laravel will pass it automatically
     public $active;
     /**
      * Create a new component instance.
