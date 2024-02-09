@@ -11,4 +11,6 @@ protected static function booted()
 }
 ```
 
-
+# faker php package
+- used in factories to create fake data, but close to reality
+[link](https://fakerphp.github.io/)
