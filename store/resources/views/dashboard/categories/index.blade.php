@@ -19,13 +19,11 @@
 
     <form action="{{ URL::current() }}" method="GET" class="d-flex justify-content-between mb-4">
         <x-form.input name="name" placeholder="Name" class="mx-2" :value="request('name')" />
-        <select name="status" class="form-control form-select">
             <x-form.select name="status" :options="[
                 ''=>'All',
                 'active'=>'Active',
                 'archived'=>'Archived'
-            ]" class="mx-2" />
-        </select>
+            ]" class="mx-2" :selected="request('status')" />
         <button class="btn btn-dark mx-2">Filter</button>
     </form>
     <table class="table">

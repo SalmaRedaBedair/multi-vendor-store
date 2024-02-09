@@ -1,6 +1,16 @@
-# scopes
-- when i try to return query with only active status
+_do you remember filter i use in the previous video?_
+- i can make it using something call scope :"
+- notice these notes to know how i will make it ;)
 
+# scopes
+## advantages of eloquent
+- i can make scopes to use it with quires
+- scopes are better to be used
+    - if there is any code i will use many times in controller i will not repeat
+    - if the code in big the controller will look more simple
+    - i achieve the rules of OOP :"
+## 1. **static scope**
+- have only one status
 ```php
 // in model i define scope
 
@@ -14,7 +24,8 @@ public function scopeActive(Builder $builder)
 ```php
 $categories=Category::active()->paginate();
 ```
-## dynamic scope
+## 2. **dynamic scope**
+- have multiple status, the thing i check is variable, i can pass it
 ```php
 public function scopeStatus(Builder $builder, $status)
 {
@@ -49,3 +60,4 @@ public function index()
     return view('dashboard.categories.index', compact('categories'));
 }
 ```
+
