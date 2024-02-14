@@ -8,10 +8,27 @@
 ```
 ```php
 $product->store // that will return model Store
-$product->store() // that will rerurn relation store
+$product->store() // that will return relation store
 $product->store()->first() // will return model, same as first one
 ```
-## for better performance use eager loading
+# [Laravel N+1 Query Detector](https://github.com/beyondcode/laravel-query-detector)
+- that package will give you advices to use eager loading in case of n+1 problem
+- improve performance
+
+## for better performance use eager loading (use with)
+```php
+$contacts = Contact::with('phoneNumbers')->get();
+```
+- instead of 
+```php
+$contacts = Contact::all();
+foreach ($contacts as $contact) {
+    foreach ($contact->phone_numbers as $phone_number) {
+        echo $phone_number->number;
+    }
+}
+```
+### models take consume more memory
 - that will load all relations between models before return 
 ```php
  public function index()
@@ -23,7 +40,7 @@ $product->store()->first() // will return model, same as first one
     return view('dashboard.products.index', compact('products'));
 }
 ```
-- that will take more time, so the above code solve that problem
+- that will take more time, there will be query in every loop
 
 ```php
 @foreach ($products as $product) // 2*n select from data base
@@ -46,59 +63,71 @@ $product->store()->first() // will return model, same as first one
 
 ## now important question when to use eager loading and when to use joins, understand diffrent between them well
 
-# withDefault
-- it will return empty object instead of null
+### `withDefault`
+- Instead of returning `null`, `withDefault` will return an empty object.
+- You can specify default values to overwrite.
+
 ```php
 public function parent()
 {
-     return $this->belongsTo(Category::class,'parent_id','id')
+    return $this->belongsTo(Category::class, 'parent_id', 'id')
         ->withDefault([
             'name' => '-'
-        ]); // it will return empty object instead of null
+        ]);
 }
 ```
 
-# selectRaw
-- here i want to write statment to return some thing
-- so i should use selectRaw not just select
-- select will treat that statment as a column name
+### `selectRaw`
+- Use `selectRaw` when you need to write a custom SQL statement to return specific values.
+- The statement executes as written and returns column names as specified aliases for use as property names.
 ```php
 selectRaw('(select count(*) from products where category_id=categories_id) as products_count');
 // is equal to
 select(DB::raw('(select count(*) from products where category_id=categories_id) as products_count'));
 ```
-# select
-- i can't use more than one select statment in the same query, so i use array of select
-- if i want to use more than one select statment i can use addSelect
 
 ```php
+$selectRawQuery = '(select count(*) from products where category_id = categories_id) as products_count';
 $categories = Category::with('parent')
-->select('categories.*')
-->addSelect(DB::raw('(select count(*) from products where category_id=categories_id) as products_count'));
-->filter($request->query())
-->orderBy('categories.name')
-->paginate();
+    ->selectRaw($selectRawQuery)
+    ->filter($request->query())
+    ->orderBy('categories.name')
+    ->paginate();
 ```
 
-# withcount
-- count number of relations with that table
+### `select`
+- Multiple `select` statements can't be used in the same query, so use an array of `select`.
+- If more than one `select` is needed, `addSelect` should be used.
 
 ```php
 $categories = Category::with('parent')
-->withCount('products') // that will add properity with name products_count 
-->filter($request->query())
-->orderBy('categories.name')
-->paginate();
+    ->select('categories.*')
+    ->addSelect(DB::raw('(select count(*) from products where category_id = categories_id) as products_count'))
+    ->filter($request->query())
+    ->orderBy('categories.name')
+    ->paginate();
 ```
-## to add condition to withcount like return only active categories
-- i use closure function
+
+### `withCount`
+- Counts the number of relations with another table, providing the number of rows from the related table that have a connection with the current model.
 
 ```php
 $categories = Category::with('parent')
-->withCount(['products'=> function($query){
-    $query->where('status','active')
-}]) // that will add properity with name products_count 
-->filter($request->query())
-->orderBy('categories.name')
-->paginate();
+    ->withCount('products') // Adds a property named 'products_count'.
+    ->filter($request->query())
+    ->orderBy('categories.name')
+    ->paginate();
+```
+
+### Adding Conditions to `withCount`
+- You can add conditions to `withCount`, such as returning only active categories, by passing an array of relations as keys and closure functions with the desired conditions.
+
+```php
+$categories = Category::with('parent')
+    ->withCount(['products' => function ($query) {
+        $query->where('status', 'active');
+    }])
+    ->filter($request->query())
+    ->orderBy('categories.name')
+    ->paginate();
 ```

@@ -27,7 +27,7 @@ class ProfileController extends Controller
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'birthday' => ['nullable', 'date', 'before:today'],
-            'gender' => ['in:male, female'],
+            'gender' => ['in:male,female'],
             'country' => ['required', 'string', 'size:2']
         ]);
         $user = $request->user(); // same as Auth::user

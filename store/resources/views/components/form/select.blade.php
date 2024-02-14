@@ -1,4 +1,4 @@
-@props(['name', 'selected' => '', 'label' => false, 'options'])
+@props(['name', 'selected' => old($name, $selected), 'label' => false, 'options'])
 
 @if ($label)
     <label for="">{{ $label }}</label>
@@ -16,3 +16,8 @@
     @endforeach
 </select>
 
+@error($name)
+<div class="invalid-feedback">
+    {{ $message }}
+</div>
+@enderror

@@ -1,3 +1,16 @@
+# define 1:1 relation in migration file (for database validation)
+- define foreign key as a primary key, like that:
+
+```php
+public function up(): void
+{
+    Schema::create('profiles', function (Blueprint $table) {
+        $table->foreignId('id')->constrained()->cascadeOnDelete();
+        // --- 
+        $table->primary('user_id');
+    });
+}
+```
 # authenticated user
 - may be returned from request or auth as usual
 ```php
@@ -33,7 +46,7 @@ $profile = $user->profile;
             Profile::create($request->all());
         }
 ```
-# diffrence betwween route patch and put
+# difference between route patch and put
 ```php
     Route::patch('profile',[ProfileController::class,'update'])->name('profile.edit'); 
     // we use patch because route put must contains id

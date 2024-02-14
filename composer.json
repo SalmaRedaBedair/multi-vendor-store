@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "beyondcode/laravel-query-detector": "^1.8"
+    }
+}

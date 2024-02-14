@@ -177,7 +177,7 @@ spl_autoload_register(function($className){ // ex: $className ='App/Http/Control
 class ServiceContainer{
     protected $container=[]; // array to store values
 
-    public function bind($name, $instance) // name of object as key, instance as value
+    public function bind($name, $instance) // name of name as key, instance as value (object)
     {
         $this->container[$name]=$instance;
     }
@@ -191,7 +191,7 @@ class ServiceContainer{
 
 ## facade
 - something like alias to class name, we use it to simplify working with classes, not to use objects, to avoid object dependancy (object dependancy is when class need object of another class to be called)
-- it provide static inerface
+- it provide static interface
 
 ```php
 class Facade
