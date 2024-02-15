@@ -26,8 +26,9 @@ class ProductController extends Controller
     public function create()
     {
         $product= new Product();
+        $categories=Category::all()->pluck('name','id');
         $tags=$product->tags;
-        return view('dashboard.products.create',compact(['product','tags']));
+        return view('dashboard.products.create',compact(['product','tags','categories']));
     }
 
     /**
@@ -51,7 +52,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $categories=Category::all();
+        $categories=Category::all()->pluck('name','id');
         $tags=implode(',',$product->tags()->pluck('name')->toArray());
         return view('dashboard.products.edit', compact(['product','categories','tags']));
     }
@@ -63,28 +64,31 @@ class ProductController extends Controller
     {
         $product->update($request->except('tags'));
 
-        $tags=json_decode($request->post('tags'));
+        $tags = explode(',', $request->post('tags'));
+
         $tag_ids=[];
 
         $saved_tags=Tag::all();
 
-        foreach($tags as $item)
-        {
-            $slug=Str::slug($item->value);
-            $tag=$saved_tags->where('slug',$slug)->first();
-            if(!$tag){
-                $tag=Tag::create([
-                    'name'=>$item->value,
-                    'slug'=>$slug
-                ]);
-            }
+        if(!empty($tags)){
+            foreach($tags as $item)
+            {
+                $slug=Str::slug($item);
+                $tag=$saved_tags->where('slug',$slug)->first();
+                if(!$tag){
+                    $tag=Tag::create([
+                        'name'=>$item,
+                        'slug'=>$slug
+                    ]);
+                }
 
-            $tag_ids[]=$tag->id;
+                $tag_ids[]=$tag->id;
+            }
         }
 
         $product->tags()->sync($tag_ids); // use to add relation many to many
 
-        return redirect()->route('products.index')->with('success','Product updated.');
+        return redirect()->route('dashboard.products.index')->with('success','Product updated.');
     }
 
     /**

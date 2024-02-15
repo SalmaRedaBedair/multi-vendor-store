@@ -1,62 +1,20 @@
-# add relation many to many
+# define many to many relationship in pivot table in db
 ```php
-    public function update(Request $request, Product $product)
+public function up(): void
     {
-        $product->update($request->except('tags'));
+        Schema::create('product_tag', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
 
-        $tags=explode(',', $request->post('tags'));
-        $tag_ids=[];
-
-        foreach($tags as $t_name)
-        {
-            $slug=Str::slug($t_name);
-            $tag=Tag::where('slug',$slug);
-            if(!$tag){
-                $tag=Tag::create([
-                    'name'=>$t_name,
-                    'slug'=>$slug
-                ]);
-            }
-
-            $tag_ids[]=$tag->id;
-        }
-
-        $product->tags()->sync($tag_ids); // use to add relation many to many
-
-        return redirect()->route('categories.index')->with('success','Product updated.');
+            $table->primary(['product_id','tag_id']);
+        });
     }
 ```
-
-# collection
-- we use it instead of using quiries in data base many times 
+# pluck
+- convert object to array of keys and values
 ```php
-    public function update(Request $request, Product $product)
+public function create()
     {
-        $product->update($request->except('tags'));
-
-        $tags=explode(',', $request->post('tags'));
-        $tag_ids=[];
-
-        $saved_tags=Tag::all();
-
-        foreach($tags as $t_name)
-        {
-            $slug=Str::slug($t_name);
-            $tag=$saved_tags->where('slug',$slug)->first();
-            // that replace that 
-            // $tage=Tag::where('slug',$slug)->first();
-            if(!$tag){
-                $tag=Tag::create([
-                    'name'=>$t_name,
-                    'slug'=>$slug
-                ]);
-            }
-
-            $tag_ids[]=$tag->id;
-        }
-
-        $product->tags()->sync($tag_ids); // use to add relation many to many
-
-        return redirect()->route('products.index')->with('success','Product updated.');
+        $parents = Category::all()->pluck('name','id');
     }
 ```

@@ -3,12 +3,7 @@
 </div>
 <div class="form-group">
     <label for="">Category</label>
-    <select name="category_id" class="form-control form-select">
-        <option value="">Primary Category</option>
-        @foreach(App\Models\Category::all() as $category)
-        <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id) == $category->id)>{{ $category->name }}</option>
-        @endforeach
-    </select>
+    <x-form.select name="category_id" :options="$categories" :selected="$product->category_id" />
 </div>
 <div class="form-group">
     <label for="">Description</label>

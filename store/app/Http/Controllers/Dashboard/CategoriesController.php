@@ -47,7 +47,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        $parents = Category::all(['id','name']);
+        $parents = Category::all()->pluck('name','id');
         $category = new Category();
         return view('dashboard.categories.create', compact(['parents', 'category']));
     }
