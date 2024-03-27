@@ -33,7 +33,7 @@ return [
     |
     */
 
-    'guard' => ['web'],
+    'guard' => ['web'], // here i can add any guard i have created like admin
 
     /*
     |--------------------------------------------------------------------------

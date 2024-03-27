@@ -7,12 +7,16 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel-notification-channels/fcm": "^4.1",
+        "laravel/fortify": "^1.20",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "symfony/intl": "^7.0"
+        "symfony/intl": "^7.0",
+        "twilio/sdk": "^7.16"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.12",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",

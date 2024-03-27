@@ -1,5 +1,8 @@
 {
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.8"
+    },
+    "require": {
+        "laravel-notification-channels/fcm": "^4.1"
     }
 }

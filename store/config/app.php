@@ -75,6 +75,8 @@ return [
 
     'timezone' => 'Africa/Cairo',
 
+    'api_token'=>env('API_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -162,16 +164,20 @@ return [
             /*
              * Package Service Providers...
              */
+        Kreait\Laravel\Firebase\ServiceProvider::class,
 
-            /*
-             * Application Service Providers...
-             */
+
+        /*
+         * Application Service Providers...
+         */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-            // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\FortifyServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\CartServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -188,6 +194,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Currency' => App\Helpers\Currency::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     ])->toArray(),
 
 ];

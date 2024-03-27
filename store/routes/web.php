@@ -20,9 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->get('/', [HomeController::class,'index'])->name('home');
 
-Route::get('/dash', function () {
+Route::resource('verify', \App\Http\Controllers\TwoFactorController::class);
+
+Route::middleware(['auth','verified','two_factor'])->get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dash');
+})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,3 +47,4 @@ require __DIR__.'/auth.php';
 require __DIR__.'/dashboard.php';
 
 
+Route::get('test',[\App\Http\Controllers\TestController::class,'index'])->name('test.index');

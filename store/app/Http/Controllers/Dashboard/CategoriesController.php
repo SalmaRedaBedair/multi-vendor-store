@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Models\User;
+use App\Notifications\NewCategoryNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use App\Models\Category;
 use Carbon\Carbon;
@@ -19,6 +22,29 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+        User::find(1)->notify(new NewCategoryNotification(new Category()));
+        return;
+// Retrieve the user's token
+        $user = User::find(1);
+        $deviceToken = $user->deviceTokens->first();
+
+        if ($deviceToken) {
+            $token = $deviceToken->token;
+
+            // Instantiate the notification
+            $notification = new NewCategoryNotification(new Category());
+
+            // Send the notification
+            $notification=Notification::route('fcm', $token)->notify($notification);
+            dd($notification);
+            return true;
+        } else {
+            // Handle case when there's no device token for the user
+            // For example, log an error or take appropriate action
+            return false;
+        }
+
+        return;
         $request = Request();
 
         // select a.*, b.name as parent_id

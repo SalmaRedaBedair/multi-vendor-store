@@ -20,7 +20,7 @@
 - we use it when i will add style or any thing many times and want all to still in page not to override
 
 # .env 
-- env mean enviornment variable
+- env mean environment variable
 - if i have any thing include spaces it must be written between double or single qoutetion ('' or "")
 
 # ASSET_URL
@@ -44,7 +44,7 @@ asset('dist/img/AdminLTELogo.png');
 
 # cache and .env
 - if i make cache for config files, i will not be able to read from .env file
-- so it is recommened to read from config file not from .env during working on project 
+- so it is recommend to read from config file not from .env during working on project 
 - any changes in .env after cache will not be noticed
 
 ```php

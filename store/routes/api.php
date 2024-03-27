@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->get('/user', function () {
+    return \Illuminate\Support\Facades\Auth::guard('sanctum')->user();
 });
+
+Route::post('auth/access-tokens',[\App\Http\Controllers\Api\AccessTokensController::class,'store']);
+
+Route::delete('auth/access-tokens/{token?}',[\App\Http\Controllers\Api\AccessTokensController::class,'destroy'])
+    ->middleware('auth:sanctum');
+Route::middleware(['auth:sanctum','auth.admin'])->resource('product', \App\Http\Controllers\Api\ProdutController::class);

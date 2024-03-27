@@ -2,12 +2,15 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
+use App\Notifications\TwoFactorCode;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Twilio\Rest\Client;
 
 class LoginRequest extends FormRequest
 {
@@ -49,6 +52,23 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user=User::where('email', $this->input('email'))->first();
+        $user->generateCode();
+
+//        $user->notify(new TwoFactorCode());
+
+        $message= 'OTP code: '.$user->code;
+        $sid=env('TWILIO_SID');
+        $token=env('TWILIO_TOKEN');
+        $twilio = new Client($sid, $token);
+
+        $twilio->messages
+            ->create("+201557558590", // to
+                array(
+                    "from" => "+12407894744",
+                    "body" => $message
+                )
+            );
         RateLimiter::clear($this->throttleKey());
     }
 

@@ -1,4 +1,4 @@
-<x-front-layout :title="$product->title">
+<x-front-layout :title="$product->name">
     <x-slot name="breadcrumb">
         <div class="breadcrumbs">
             <div class="container">
