@@ -1,17 +1,20 @@
 # middleware
-- middlewares in app/http/kernal.php are default middlewares for all controllers
+- to make middleware, you must define it in kernel
 
-# maintancence
-- when app in maintanence i write command
+## middlewares for web and for api
+- in routeServiceProvider
+```php
+Route::middleware('api')
+    ->prefix('api')
+    ->group(base_path('routes/api.php'));
 
+Route::middleware('web')
+    ->group(base_path('routes/web.php'));
 ```
-php artisan down
-```
-- when i ask website it will say "service unavailable"
-- that is because website pass throw middleware called `\App\Http\Middleware\PreventRequestsDuringMaintenance::class` before asking web page
+- those two middleware will be applied directly to all routes inside api or web file
 
 # trim & convert empty string to null
-- that cause because when of those middlewares
+- that cause because of those middlewares
 
 ```php
 \App\Http\Middleware\TrimStrings::class,
@@ -68,14 +71,36 @@ Route::get('/', [HomeController::class,'index'])->name('home')->middleware('web'
         }
         return $next($request); // that mean pass request to next step
         // when i request any page, it will call middlewares before go to controller
-        // when it go to middleware it will pass request to next middlware then next middlware then next middlware ... untill it reach controller and padd it to it to
+        // when it go to middleware it will pass request to next middleware then next middleware then next middleware ... until it reaches controller and pass it to it too
     }
+```
+## send parameters to middleware
+- `middleware_alias: parameters`
+```php
+    public function handle(Request $request, Closure $next, $type): Response 
+    { // $type is a parameter
+        $user=$request->user();
+        if(!$user)
+        {
+            return redirect()->route('login');
+        }
+
+        if($user->type==$type)
+        {
+            abort(403);
+        }
+        return $next($request); 
+    }
+```
+- to pass parameters to the middleware use `:` after middleware alias name
+```php
+// like that
+'type:admin'
 ```
 
 # web hook & csrf
 - when one app send request to my app, like paypal
 - paypal can't send csrf, so i must except it from middleware csrf, to not return expired
-
 ```php
 <?php
 
@@ -92,10 +117,20 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'paypal/webhook' // that route is defined in web.php
+        // middleware will not be applied to that route
     ];
 }
 
 ```
+
+# maintenance
+- when app in maintenance i write command
+
+```
+php artisan down
+```
+- when i ask website it will say "service unavailable"
+- that is because website pass throw middleware called `\App\Http\Middleware\PreventRequestsDuringMaintenance::class` before asking web page
 
 # forceFill
 - will update user even if it is not added in $fillable
